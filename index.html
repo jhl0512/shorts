@@ -111,7 +111,7 @@
   async function loadAll() {
     for (const cat of categories) {
       try {
-        const res = await fetch("rumbling.js");
+        const res = await fetch("rumbling.json");
         if (!res.ok) throw new Error(cat + '.csv 로드 실패');
         const json = await res.json();
         json.forEach(row => container.appendChild(createPost(row)));
