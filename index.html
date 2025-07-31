@@ -117,18 +117,22 @@
     return post;
   }
 
-  async function loadAll() {
-    for (const cat of categories) {
-      try {
-        const res = await fetch(`${cat}.csv`);
-        if (!res.ok) throw new Error(cat + '.csv 로드 실패');
-        const text = await res.text();
-        parseCSV(text).forEach(row => container.appendChild(createPost(row)));
-        updateAudio();
-      } catch (err) { console.error(err); }
+  
+async function loadAll() {
+  for (const cat of categories) {
+    try {
+      const res = await fetch(`${cat}.js`);
+      if (!res.ok) throw new Error(`${cat}.js 로드 실패`);
+      const data = await res.json();
+      data.forEach(row => container.appendChild(createPost(row)));
+      updateAudio();
+    } catch (err) {
+      console.error(err);
     }
-    loading.style.display = 'none';
   }
+  loading.style.display = 'none';
+}
+
 
   let isScrolling = false;
   container.addEventListener('wheel', e => {
