@@ -87,16 +87,7 @@
   const template = document.getElementById('video-template');
   template.removeAttribute('id'); container.removeChild(template);
 
-  function parseCSV(text) {
-    const lines = text.trim().split('\n');
-    const headers = lines[0].split(',').map(h => h.trim());
-    return lines.slice(1).map(line => {
-      const cols = line.split(',').map(c => c.trim());
-      let o = {};
-      headers.forEach((h, i) => o[h] = cols[i] || '');
-      return o;
-    });
-  }
+
 
   function createPost(data) {
     const post = template.cloneNode(true);
@@ -117,22 +108,18 @@
     return post;
   }
 
-  
-async function loadAll() {
-  for (const cat of categories) {
-    try {
-      const res = await fetch(`${cat}.js`);
-      if (!res.ok) throw new Error(`${cat}.js 로드 실패`);
-      const data = await res.json();
-      data.forEach(row => container.appendChild(createPost(row)));
-      updateAudio();
-    } catch (err) {
-      console.error(err);
+  async function loadAll() {
+    for (const cat of categories) {
+      try {
+        const res = await fetch("rumbling.js");
+        if (!res.ok) throw new Error(cat + '.csv 로드 실패');
+        const json = await res.json();
+        json.forEach(row => container.appendChild(createPost(row)));
+        updateAudio();
+      } catch (err) { console.error(err); }
     }
+    loading.style.display = 'none';
   }
-  loading.style.display = 'none';
-}
-
 
   let isScrolling = false;
   container.addEventListener('wheel', e => {
